@@ -22,17 +22,24 @@
       <button v-on:click="add(10)">Add 10</button>
       <button v-on:click.right="reduce(5)">Remove</button>
       <p>Result: {{ counter }}</p>
-      <input
+      <!-- <input
         type="text"
         v-on:input="setName($event,'tukadiya')"
         v-on:keyup.enter="confirmNameMethod()"
-      />
-      <p>Result: {{ confirmName }}</p>
+        v-bind:value="name"
+      /> -->
+      <input type="text" v-model="name" />
+      <input type="text " v-model="lastName" />
+      <button v-on:click="resetInput()">Reset</button>
 
-      <form v-on:submit.prevent="submitForm">
+      <p>Result : {{fullName}}</p>
+      <!--here  don't use () because is computed property method-->
+      <!-- <p>Result: {{ name }}</p> -->
+
+      <!-- <form v-on:submit.prevent="submitForm">
         <input type="text" />
         <button>Sign up</button>
-      </form>
+      </form> -->
     </section>
   </body>
 </html>
