@@ -44,11 +44,11 @@
           SPECIAL ATTACK
         </button>
         <button @click="healPlayer()">HEAL</button>
-        <button @click="surrender">SURRENDER</button>
-      </section>
-      <section id="log" class="container">
-        <h2>Battle Log</h2>
-        <ul>
+        <button @click="surrender">SURRENDER</button> playerHealth: 100,
+        monsterHealth: 100,
+        currentRound: 0,
+        winner: null,
+        logMessages: [],
           <li v-for="logMessage in logMessages">
             <span
               :class="{'log--player': logMessage.actionBy === 'player','log--monster':logMessage.actionBy === 'monster'}"
@@ -70,3 +70,4 @@
     </div>
   </body>
 </html>
+

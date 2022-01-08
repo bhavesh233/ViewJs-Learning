@@ -9,7 +9,7 @@
     <div id="app">
       <div>
         <label for="goal">Goal</label>
-        <input type="text" id="goal" v-model="enterValue" />
+        <input type="text" id="goal" v-model="enterValue"  ref="userText"/>
         <button v-on:click="addGoal">Add goal</button>
       </div>
       <div>
