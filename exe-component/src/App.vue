@@ -3,22 +3,15 @@
     <header>
       <h1>My Friends</h1>
     </header>
+    <user-data @add-data="addUserData"> </user-data>
 
-    <new-friend @add-contact="addContact"></new-friend>
-
-    <ul>
-      <contact-vue
-        v-for="friend in friends"
-        :id="friend.id"
-        :key="friend.id"
-        :name="friend.name"
-        :phone="friend.phone"
-        :email="friend.email"
-        :is-favorite="friend.isFavorite"
-        @toggle-favorite="toggleFavoriteStatus"
-        @delete="deleteContact"
-      ></contact-vue>
-    </ul>
+    <active-data
+      v-for="friend in friends"
+      :key="friend.name"
+      :name="friend.name"
+      :age="friend.age"
+    >
+    </active-data>
   </section>
 </template>
 
@@ -28,44 +21,25 @@ export default {
     return {
       friends: [
         {
-          id: "manuel",
-          name: "Manuel Lorenz",
-          phone: "0123 45678 9friend0",
-          email: "manuel@loclhost.com",
-          isFavorite: true,
+          name: "bhavesh",
+          age: 20,
         },
         {
-          id: "julie",
-          name: "Julie Jones",
-          phone: "0987 654421 21",
-          email: "julie@localhost.com",
-          isFavorite: false,
+          name: "Tulesh",
+          age: 18,
         },
       ],
     };
   },
   methods: {
-    toggleFavoriteStatus(friendId) {
-      console.log(friendId);
-      console.log(this.friends);
-    },
-    addContact(name, phone, email) {
-      const newFriendContact = {
-        id: new Date().toISOString(),
+    addUserData(name, age) {
+      const add = {
         name: name,
-        phone: phone,
-        email: email,
-        isFavorite: false,
+        age: age,
       };
-      this.friends.push(newFriendContact);
+      console.log(typeof add.age);
+      this.friends.push(add);
     },
-  },
-  deleteContact(friendId) {
-    console.log("hello");
-    console.log(friendId);
-    this.friends = this.friends.filter((f) => {
-      f.id !== friendId;
-    });
   },
 };
 </script>
@@ -91,7 +65,7 @@ header {
   width: 90%;
   max-width: 40rem;
 }
-deleteContact #app ul {
+#app ul {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -126,5 +100,18 @@ deleteContact #app ul {
   background-color: #ec3169;
   border-color: #ec3169;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.26);
+}
+#app input {
+  font: inherit;
+  padding: 0.15rem;
+}
+#app label {
+  font-weight: bold;
+  margin-right: 1rem;
+  width: 7rem;
+  display: inline-block;
+}
+#app form div {
+  margin: 1rem 0;
 }
 </style>
