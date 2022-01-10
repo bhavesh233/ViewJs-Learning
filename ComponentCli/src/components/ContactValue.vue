@@ -1,6 +1,6 @@
 <template>
   <li>
-    <h2>{{ name }}{{ friendIsFavorite ? "(Favorite)" : "" }}</h2>
+    <h2>{{ name }}{{ isFavorite ? "(Favorite)" : "" }}</h2>
     <button @click="toggleFavorite">Toggle Favorite</button>
     <button @click="toggleDetails">
       {{ detailsAreVisible ? "Hide" : "Show" }} Details
@@ -15,7 +15,7 @@
         {{ email }}
       </li>
     </ul>
-    <button @click="$emit('delete',this.id)">Delete</button>
+    <button @click="$emit('delete', id)">Delete</button>
   </li>
 </template>
 
@@ -52,7 +52,6 @@ export default {
   data() {
     return {
       detailsAreVisible: false,
-      friendIsFavorite: this.isFavorite,
     };
   },
   methods: {
