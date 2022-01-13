@@ -25,7 +25,7 @@ export default {
       changedSaved: false,
     };
   },
-  meta: { needAuth: true },
+  
   inject: ['users'],
   methods: {
     saveChanges() {
