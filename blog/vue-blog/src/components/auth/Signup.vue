@@ -1,5 +1,8 @@
 <template>
   <div>
+    <base-dialog :show="!!error" title="An error occurred" @close="handleError">
+      <p>{{ error }}</p>
+    </base-dialog>
     <section
       class="bg-image"
       style="
@@ -75,7 +78,7 @@
                     <router-link
                       class="btn btn-lg btn-block btn-primary"
                       style="background-color: blue"
-                      to="/signup"
+                      to="/login"
                       >Login here</router-link
                     >
                   </form>
@@ -92,6 +95,7 @@
 export default {
   data() {
     return {
+      error: null,
       fullName: "",
       email: "",
       username: "",
@@ -100,7 +104,7 @@ export default {
     };
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       const regNum = /[0-9]/;
       let findSpecialCharacter = false;
       let validFullName = false;
@@ -136,9 +140,23 @@ export default {
         validFullName;
 
       if (validiteValue) {
+        this.error = "Failed to authenticate. Check your Singup data.";
         return null;
       }
-      console.log("hello");
+      try {
+        await this.$store.dispatch("storeData/signup", {
+          fullName: this.fullName,
+          email: this.email,
+          username: this.username,
+          password: this.password,
+        });
+        this.$router.replace("/home");
+      } catch (error) {
+        this.error = "Failed to authenticate. Check your Singup data.";
+      }
+    },
+    handleError() {
+      this.error = null;
     },
   },
 };
