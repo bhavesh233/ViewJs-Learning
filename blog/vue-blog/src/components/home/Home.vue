@@ -1,13 +1,20 @@
 <template>
   <div>
-    <div class="list-group">
-      <div>
-        <div>
-          <router-link to="/new-blog" class="btn btn-primary">
-            Write Somethihng to Better World
-          </router-link>
-        </div>
+    <the-header></the-header>
+
+    <br />
+
+    <div class="position-relative">
+      <div class="position-absolute">
+        <router-link :to="isLogin" class="btn btn-primary">
+          Write Somethihng to Better World
+        </router-link>
       </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="list-group">
       <div v-for="list in listData" :key="list.id">
         <router-link
           :to="'/blog-detail/' + list.id"
@@ -22,6 +29,7 @@
         </router-link>
       </div>
     </div>
+    <the-footer></the-footer>
   </div>
 </template>
 
@@ -31,13 +39,20 @@ export default {
   data() {
     return {
       // listData: null,
-    };
+    }
   },
   computed: {
     listData() {
-      console.log(this.$store.getters.fetchBlogData);
-      return this.$store.getters.fetchBlogData;
+      return this.$store.getters.fetchBlogData
+    },
+    isLogin() {
+      const login = this.$store.getters['fetchData/isLogin']
+      if (login) {
+        return '/new-blog'
+      } else {
+        return '/login'
+      }
     },
   },
-};
+}
 </script>

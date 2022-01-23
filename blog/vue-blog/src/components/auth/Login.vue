@@ -1,13 +1,15 @@
 <template>
   <div>
+    <the-header></the-header>
+
     <base-dialog :show="!!error" title="An error occurred" @close="handleError">
       <p>{{ error }}</p>
     </base-dialog>
-    <section style="background-color: #508bfc">
+    <section style="background-color: #508bfc;">
       <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-            <div class="card shadow-2-strong" style="border-radius: 1rem">
+            <div class="card shadow-2-strong" style="border-radius: 1rem;">
               <div class="card-body p-5 text-center">
                 <h3 class="mb-5">Sign in</h3>
                 <form @submit.prevent="submitForm">
@@ -40,16 +42,18 @@
 
                 <router-link
                   class="btn btn-lg btn-block btn-primary"
-                  style="background-color: green"
+                  style="background-color: green;"
                   to="/signup"
-                  >create new account</router-link
                 >
+                  create new account
+                </router-link>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <the-footer></the-footer>
   </div>
 </template>
 
@@ -58,27 +62,27 @@ export default {
   data() {
     return {
       error: null,
-      email: "",
-      password: "",
-    };
+      email: '',
+      password: '',
+      login: false,
+    }
   },
   methods: {
     async submitForm() {
       const data = {
         email: this.email,
         password: this.password,
-      };
+      }
       try {
-        await this.$store.dispatch("fetchData/login", data);
-
-        this.$router.replace("/home");
+        await this.$store.dispatch('fetchData/login', data)
+        this.$router.replace('/home')
       } catch (error) {
-        this.error = "Failed to authenticate. Check your Login data.";
+        this.error = 'Failed to authenticate. Check your Login data.'
       }
     },
     handleError() {
-      this.error = null;
+      this.error = null
     },
   },
-};
+}
 </script>

@@ -47,16 +47,16 @@ export default {
 
     localStorage.setItem('token', responseData.idToken);
     localStorage.setItem('userId', responseData.localId);
-    localStorage.setItem('tokenExpiration', expieationDate);
-
-    timer = setTimeout(() => {
-      context.dispatch('autoLogout');
-    }, expiresIn);
 
     context.commit('setUser', {
       token: responseData.idToken,
       userId: responseData.localId,
     });
+    localStorage.setItem('tokenExpiration', expieationDate);
+
+    timer = setTimeout(() => {
+      context.dispatch('autoLogout');
+    }, expiresIn);
   },
 
   tryLogin(context) {

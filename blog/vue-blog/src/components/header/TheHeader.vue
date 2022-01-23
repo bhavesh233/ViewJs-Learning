@@ -8,7 +8,7 @@
             height="40"
             alt="Blog"
             loading="lazy"
-            style="margin-top: -1px"
+            style="margin-top: -1px;"
           />
         </a>
 
@@ -34,7 +34,7 @@
             </li>
           </ul>
 
-          <div class="d-flex align-items-center">
+          <div v-if="!isLogeed" class="d-flex align-items-center">
             <button
               type="button"
               class="btn btn-primary me-3"
@@ -51,6 +51,13 @@
               Sign up for free
             </button>
           </div>
+          <div v-if="isLogeed" class="d-flex align-items-center">
+            <div style="color: red;">{{ author }}</div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" @click="logout" class="btn btn-primary me-3">
+              logout
+            </button>
+          </div>
         </div>
       </div>
     </nav>
@@ -61,13 +68,30 @@
 
 <script>
 export default {
+  data() {
+    return {
+      author: '',
+      isLogeed: false,
+    }
+  },
   methods: {
     loginClick() {
-      this.$router.push("/login");
+      this.$router.push('/login')
     },
     singupMethod() {
-      this.$router.push("/signup");
+      this.$router.push('/signup')
+    },
+    async logout() {
+      await this.$store.dispatch('fetchData/logout')
+
+      this.$router.replace('/home')
     },
   },
-};
+  mounted() {
+    this.isLogeed = this.$store.getters['fetchData/isLogin']
+    if (this.isLogeed) {
+      this.author = this.$store.getters['fetchData/isAuthor']
+    }
+  },
+}
 </script>
