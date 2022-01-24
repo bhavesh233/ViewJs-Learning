@@ -6,6 +6,7 @@
       <img :src="data.image" alt="" />
       <ul>
         <li>{{ data.title }}</li>
+        <li>{{ data.date }}</li>
         <li>{{ data.discription }}</li>
         <li>{{ data.selectedLanguage }}</li>
         <li>{{ data.author }}</li>
@@ -19,42 +20,42 @@
 
 <script>
 export default {
-  props: ['id'],
+  props: ["id"],
   data() {
     return {
       data: null,
       allData: null,
-    }
+    };
   },
   created() {
-    this.allData = this.$store.getters.fetchBlogData
+    this.allData = this.$store.getters.fetchBlogData;
     this.data = this.$store.getters.fetchBlogData.find((s) => {
-      return s.id === +this.id
-    })
+      return s.id === +this.id;
+    });
   },
 
   methods: {
     previousMethod() {
-      let index = this.allData.findIndex((s) => s.id === +this.data.id)
+      let index = this.allData.findIndex((s) => s.id === +this.data.id);
 
-      index--
+      index--;
       if (index < 0) {
-        index = 0
+        index = 0;
       }
-      this.data = this.allData[index]
-      this.$router.replace('/blog-detail/' + index)
+      this.data = this.allData[index];
+      this.$router.replace("/blog-detail/" + index);
     },
     nextMethod() {
-      let index = this.allData.findIndex((s) => s.id === +this.data.id)
+      let index = this.allData.findIndex((s) => s.id === +this.data.id);
 
-      index++
+      index++;
       if (index > this.allData.length - 1) {
-        index = this.allData.length - 1
+        index = this.allData.length - 1;
       }
-      console.log(index)
-      this.data = this.allData[index]
-      this.$router.replace('/blog-detail/' + index)
+
+      this.data = this.allData[index];
+      this.$router.replace("/blog-detail/" + index);
     },
   },
-}
+};
 </script>

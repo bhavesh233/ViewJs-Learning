@@ -8,7 +8,7 @@
             height="40"
             alt="Blog"
             loading="lazy"
-            style="margin-top: -1px;"
+            style="margin-top: -1px"
           />
         </a>
 
@@ -30,7 +30,7 @@
               <router-link to="/home" class="nav-link">Home</router-link>
             </li>
             <li>
-              <router-link to="/login" class="nav-link">MyBlogs</router-link>
+              <router-link :to="loggedIn" class="nav-link">MyBlogs</router-link>
             </li>
           </ul>
 
@@ -52,7 +52,7 @@
             </button>
           </div>
           <div v-if="isLogeed" class="d-flex align-items-center">
-            <div style="color: red;">{{ author }}</div>
+            <div style="color: red">{{ author }}</div>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button type="button" @click="logout" class="btn btn-primary me-3">
               logout
@@ -70,28 +70,39 @@
 export default {
   data() {
     return {
-      author: '',
+      author: "",
       isLogeed: false,
-    }
+    };
   },
   methods: {
     loginClick() {
-      this.$router.push('/login')
+      this.$router.push("/login");
     },
     singupMethod() {
-      this.$router.push('/signup')
+      this.$router.push("/signup");
     },
-    async logout() {
-      await this.$store.dispatch('fetchData/logout')
+    logout() {
+      this.$store.dispatch("auth/logout");
 
-      this.$router.replace('/home')
+      this.isLogeed = this.$store.getters["auth/isLogin"];
+      this.$router.replace("/home");
+    },
+  },
+  computed: {
+    loggedIn() {
+      if (this.isLogeed) {
+        return "/my-blogs";
+      } else {
+        return "/login";
+      }
     },
   },
   mounted() {
-    this.isLogeed = this.$store.getters['fetchData/isLogin']
+    this.isLogeed = this.$store.getters["auth/isLogin"];
+
     if (this.isLogeed) {
-      this.author = this.$store.getters['fetchData/isAuthor']
+      this.author = this.$store.getters["auth/isAuthor"];
     }
   },
-}
+};
 </script>
