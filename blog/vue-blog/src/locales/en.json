@@ -1,0 +1,11 @@
+{
+    "message": "hello i18n !!",
+    "nav":{
+        "fe":"home",
+        "blog":"My Blogs",
+        "login":"Login",
+        "singup":"Singup",
+        "copyright":"copyright: Blog",
+        "logout":"logout"
+    }
+  }

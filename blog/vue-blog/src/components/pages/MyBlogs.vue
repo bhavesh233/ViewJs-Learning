@@ -1,6 +1,10 @@
 <template>
   <div>
     <the-header></the-header>
+
+    <edit-popup :show="!!editPopup" title="UPDATE BLOG" @close="handleError">
+    </edit-popup>
+
     <div class="list-group">
       <div v-for="list in myBlogsList" :key="list.id">
         <router-link
@@ -34,8 +38,9 @@
 export default {
   data() {
     return {
+      editPopup: null,
       author: "",
-      myBlogsList: [],
+      myBlogsList: null,
     };
   },
   created() {
@@ -53,7 +58,7 @@ export default {
       });
 
       await this.$store.commit("editData", editData);
-      this.$router.replace("/new-blog");
+      this.editPopup = "hi";
     },
     async deletMethod(id) {
       await this.$store.commit("deleteData", id);
@@ -63,6 +68,12 @@ export default {
           return s.email === this.$store.getters["auth/getEmail"];
         });
       }
+      this.myBlogsList = this.$store.getters.fetchBlogData.filter((s) => {
+        return s.email === this.$store.getters["auth/getEmail"];
+      });
+    },
+    handleError() {
+      this.editPopup = null;
     },
   },
 };

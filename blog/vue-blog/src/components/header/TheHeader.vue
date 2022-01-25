@@ -27,12 +27,26 @@
         <div class="collapse navbar-collapse" id="navbarButtonsExample">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link to="/home" class="nav-link">Home</router-link>
+              <router-link to="/home" class="nav-link">
+                <p>{{ $t("nav.fe") }}</p></router-link
+              >
             </li>
             <li>
-              <router-link :to="loggedIn" class="nav-link">MyBlogs</router-link>
+              <router-link :to="loggedIn" class="nav-link">
+                <p>{{ $t("nav.blog") }}</p></router-link
+              >
             </li>
           </ul>
+
+          <div>
+            <select v-model="$i18n.locale">
+              <option v-for="lang in locals" :key="lang" :value="lang">
+                {{ lang }}
+              </option>
+            </select>
+          </div>
+
+          &nbsp;&nbsp;&nbsp;
 
           <div v-if="!isLogeed" class="d-flex align-items-center">
             <button
@@ -40,7 +54,7 @@
               class="btn btn-primary me-3"
               @click="loginClick"
             >
-              Login
+              {{ $t("nav.login") }}
             </button>
 
             <button
@@ -48,14 +62,14 @@
               class="btn btn-dark px-3"
               @click="singupMethod"
             >
-              Sign up for free
+              {{ $t("nav.singup") }}
             </button>
           </div>
           <div v-if="isLogeed" class="d-flex align-items-center">
             <div style="color: red">{{ author }}</div>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button type="button" @click="logout" class="btn btn-primary me-3">
-              logout
+              {{ $t("nav.logout") }}
             </button>
           </div>
         </div>
@@ -72,6 +86,7 @@ export default {
     return {
       author: "",
       isLogeed: false,
+      locals: ["eng", "sp", "hi"],
     };
   },
   methods: {

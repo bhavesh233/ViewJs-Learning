@@ -1,0 +1,11 @@
+{
+    "message": "hindi i18n !!",
+    "nav":{
+        "fe":"घर",
+        "blog":"मेरे ब्लॉग",
+        "login":"लॉग इन",
+        "singup":"साइन अप",
+        "copyright":"copyright: Blog",
+        "logout":"लॉग आउट"
+    }
+  }
