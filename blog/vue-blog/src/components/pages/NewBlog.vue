@@ -47,11 +47,10 @@
                         <div class="col-md-12 mb-4">
                           <div class="form-outline">
                             <label class="form-label">Discription</label>
-                            <input
-                              type="text"
-                              class="form-control form-control-lg"
-                              v-model.trim="discription"
-                            />
+                            <ckeditor
+                              :editor="editor"
+                              v-model="editorData"
+                            ></ckeditor>
                           </div>
                         </div>
 
@@ -64,53 +63,71 @@
                           />
                         </div>
 
-                        <div class="row">
-                          <div class="col-md-12 mb-6">
-                            <label class="form-label">Select Language</label>
-                            <br />
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="SPRING"
-                                name="selectedLanguage"
-                                v-model.trim="selectedLanguage"
-                              />
-                              <label class="form-check-label">SPRING</label>
-                            </div>
+                        <div class="dropdown">
+                          <button
+                            class="btn btn-secondary dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            Select Language
+                          </button>
+                          <ul class="dropdown-menu checkbox-menu allow-focus">
+                            <li>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  value="SPRING"
+                                  name="selectedLanguage"
+                                  v-model.trim="selectedLanguage"
+                                />
+                                <label class="form-check-label">SPRING</label>
+                                <br />
+                              </div>
+                            </li>
+                            <li>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  value="JAVA"
+                                  name="selectedLanguage"
+                                  v-model.trim="selectedLanguage"
+                                />
+                                <label class="form-check-label">JAVA</label>
+                              </div>
+                            </li>
 
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="JAVA"
-                                name="selectedLanguage"
-                                v-model.trim="selectedLanguage"
-                              />
-                              <label class="form-check-label">JAVA</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                name="selectedLanguage"
-                                value="C"
-                                v-model.trim="selectedLanguage"
-                              />
-                              <label class="form-check-label">C</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                name="selectedLanguage"
-                                value="C++"
-                                v-model.trim="selectedLanguage"
-                              />
-                              <label class="form-check-label">C++</label>
-                            </div>
-                          </div>
+                            <li>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  name="selectedLanguage"
+                                  value="C"
+                                  v-model.trim="selectedLanguage"
+                                />
+                                <label class="form-check-label">C</label>
+                              </div>
+                            </li>
+
+                            <li>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  name="selectedLanguage"
+                                  value="C++"
+                                  v-model.trim="selectedLanguage"
+                                />
+                                <label class="form-check-label">C++</label>
+                              </div>
+                            </li>
+                          </ul>
                         </div>
+
                         <br />
                         <div class="form-outline mb-4">
                           <label class="form-label">Author</label>
@@ -145,11 +162,13 @@
 </template>
 
 <script>
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   data() {
     return {
+      editor: ClassicEditor,
+      editorData: "Content of the editor",
       error: "",
-      editData: [],
       title: "",
       img: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp",
       discription: "",
@@ -157,19 +176,13 @@ export default {
       author: this.$store.getters["auth/isAuthor"],
     };
   },
-  created() {
-    if (this.$store.getters.isUpdate) {
-      this.editData = this.$store.getters.fetEditData;
-      this.title = this.editData[0].title;
-      this.img = this.editData[0].img;
-      this.discription = this.editData[0].discription;
-    }
-  },
+
   methods: {
     async submitForm() {
+      console.log(this.editorData);
       if (
         this.title === "" ||
-        this.discription === "" ||
+        this.editorData === "" ||
         this.img === "" ||
         this.selectedLanguage.length <= 0
       ) {
@@ -177,40 +190,22 @@ export default {
         return null;
       }
 
-      if (this.$store.getters.isUpdate) {
-        
-        const data = {
-          id: this.editData[0].id,
-          title: this.title,
-          img: this.img,
-          discription: this.discription,
-          selectedLanguage: this.selectedLanguage,
-          date: this.editData[0].date,
-          author: this.author,
-          email: this.$store.getters["auth/getEmail"],
-        };
+      const date = new Date();
+      let id = this.$store.getters.fetchBlogData.length;
+      const data = {
+        id: id,
+        title: this.title,
+        img: this.img,
+        discription: this.editorData,
+        selectedLanguage: this.selectedLanguage,
+        date: date,
+        author: this.author,
+        email: this.$store.getters["auth/getEmail"],
+      };
 
-        await this.$store.commit("edit", data);
-        this.$store.state.isUpdate = false;
-        this.$router.replace("/home");
-      } else {
-        const date = new Date();
-        let id = this.$store.getters.fetchBlogData.length;
-        const data = {
-          id: id,
-          title: this.title,
-          img: this.img,
-          discription: this.discription,
-          selectedLanguage: this.selectedLanguage,
-          date: date,
-          author: this.author,
-          email: this.$store.getters["auth/getEmail"],
-        };
+      await this.$store.commit("addData", data);
 
-        await this.$store.commit("addData", data);
-
-        this.$router.replace("/home");
-      }
+      this.$router.replace("/home");
     },
     handleError() {
       this.error = null;

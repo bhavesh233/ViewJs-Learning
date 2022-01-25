@@ -1,0 +1,11 @@
+{
+    "message": "spanish i18n !!",
+    "nav":{
+        "fe":"casa",
+        "blog":"mis blogs",
+        "login":"acceso",
+        "singup":"inscribirse",
+        "copyright":"Derechos de autor: Blog",
+        "logout":"cerrar sesión"
+    }
+  }

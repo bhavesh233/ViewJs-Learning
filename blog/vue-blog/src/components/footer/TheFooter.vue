@@ -1,8 +1,8 @@
 <template>
-  <div class="bottom" >
-    <footer class="bg-light text-center text-white" >
+  <div class="bottom">
+    <footer class="bg-light text-center text-white">
       <!-- Grid container -->
-      <div class="container p-4 pb-0" >
+      <div class="container p-4 pb-0">
         <!-- Section: Social media -->
         <section class="mb-4">
           <!-- Facebook -->
@@ -63,9 +63,11 @@
       <!-- Grid container -->
 
       <!-- Copyright -->
-      <div class="text-center p-3 text-black" style="background-color: rgba(0, 0, 128, 0.2)" >
-        © 2020 Copyright:
-        <a class="text-black" href="http://localhost:8080/blogs">Blog</a>
+      <div
+        class="text-center p-3 text-black"
+        style="background-color: rgba(0, 0, 128, 0.2)"
+      >
+        © 2020 {{ $t("nav.copyright") }}
       </div>
       <!-- Copyright -->
     </footer>
