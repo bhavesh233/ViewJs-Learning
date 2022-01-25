@@ -2,6 +2,9 @@
   <div>
     <the-header></the-header>
 
+    <base-dialog :show="!!error" title="An error occurred" @close="handleError">
+      <p>{{ error }}</p>
+    </base-dialog>
     <div>
       <section class="h-100 bg-dark">
         <div class="container py-5 h-100">
@@ -10,7 +13,7 @@
           >
             <div class="col">
               <div class="card card-registration my-4">
-                <form>
+                <form @submit.prevent="submitForm">
                   <div class="row g-0">
                     <div class="col-xl-5 d-none d-xl-block">
                       <img
@@ -35,7 +38,7 @@
                               <input
                                 type="text"
                                 class="form-control form-control-lg"
-                                v-model="title"
+                                v-model.trim="title"
                               />
                             </div>
                           </div>
@@ -47,7 +50,7 @@
                             <input
                               type="text"
                               class="form-control form-control-lg"
-                              v-model="discription"
+                              v-model.trim="discription"
                             />
                           </div>
                         </div>
@@ -57,7 +60,7 @@
                           <input
                             type="text"
                             class="form-control form-control-lg"
-                            v-model="img"
+                            v-model.trim="img"
                           />
                         </div>
 
@@ -71,7 +74,7 @@
                                 type="checkbox"
                                 value="SPRING"
                                 name="selectedLanguage"
-                                v-model="selectedLanguage"
+                                v-model.trim="selectedLanguage"
                               />
                               <label class="form-check-label">SPRING</label>
                             </div>
@@ -82,7 +85,7 @@
                                 type="checkbox"
                                 value="JAVA"
                                 name="selectedLanguage"
-                                v-model="selectedLanguage"
+                                v-model.trim="selectedLanguage"
                               />
                               <label class="form-check-label">JAVA</label>
                             </div>
@@ -92,7 +95,7 @@
                                 type="checkbox"
                                 name="selectedLanguage"
                                 value="C"
-                                v-model="selectedLanguage"
+                                v-model.trim="selectedLanguage"
                               />
                               <label class="form-check-label">C</label>
                             </div>
@@ -102,7 +105,7 @@
                                 type="checkbox"
                                 name="selectedLanguage"
                                 value="C++"
-                                v-model="selectedLanguage"
+                                v-model.trim="selectedLanguage"
                               />
                               <label class="form-check-label">C++</label>
                             </div>
@@ -112,8 +115,10 @@
                         <div class="form-outline mb-4">
                           <label class="form-label">Author</label>
                           <input
+                            disabled
                             type="text"
                             class="form-control form-control-lg"
+                            v-model="author"
                           />
                         </div>
 
@@ -143,32 +148,75 @@
 export default {
   data() {
     return {
-      title: '',
-      img:
-        'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp',
-      discription: '',
+      error: "",
+      editData: [],
+      title: "",
+      img: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp",
+      discription: "",
       selectedLanguage: [],
-      author: 'Harry',
+      author: this.$store.getters["auth/isAuthor"],
+    };
+  },
+  created() {
+    if (this.$store.getters.isUpdate) {
+      this.editData = this.$store.getters.fetEditData;
+      this.title = this.editData[0].title;
+      this.img = this.editData[0].img;
+      this.discription = this.editData[0].discription;
     }
   },
   methods: {
-    submitForm() {
-      console.log(this.selectedLanguage)
-      let id = ++this.$store.getters.fetchBlogData.length
-      const data = {
-        id: id,
-        title: this.title,
-        img: this.img,
-        discription: this.discription,
-        selectedLanguage: this.selectedLanguage,
-        author: this.author,
+    async submitForm() {
+      if (
+        this.title === "" ||
+        this.discription === "" ||
+        this.img === "" ||
+        this.selectedLanguage.length <= 0
+      ) {
+        this.error = "Please Valid Input";
+        return null;
       }
 
-      this.$store.commit('addData', data)
-      this.$router.replace('/home')
+      if (this.$store.getters.isUpdate) {
+        
+        const data = {
+          id: this.editData[0].id,
+          title: this.title,
+          img: this.img,
+          discription: this.discription,
+          selectedLanguage: this.selectedLanguage,
+          date: this.editData[0].date,
+          author: this.author,
+          email: this.$store.getters["auth/getEmail"],
+        };
+
+        await this.$store.commit("edit", data);
+        this.$store.state.isUpdate = false;
+        this.$router.replace("/home");
+      } else {
+        const date = new Date();
+        let id = this.$store.getters.fetchBlogData.length;
+        const data = {
+          id: id,
+          title: this.title,
+          img: this.img,
+          discription: this.discription,
+          selectedLanguage: this.selectedLanguage,
+          date: date,
+          author: this.author,
+          email: this.$store.getters["auth/getEmail"],
+        };
+
+        await this.$store.commit("addData", data);
+
+        this.$router.replace("/home");
+      }
+    },
+    handleError() {
+      this.error = null;
     },
   },
-}
+};
 </script>
 
 <style scoped>

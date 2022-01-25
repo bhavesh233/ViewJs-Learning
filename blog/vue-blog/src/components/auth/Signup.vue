@@ -15,7 +15,7 @@
         <div class="container">
           <div class="row d-flex justify-content-center align-items-center">
             <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-              <div class="card" style="border-radius: 15px;">
+              <div class="card" style="border-radius: 15px">
                 <div class="card-body p-5">
                   <h2 class="text-uppercase text-center mb-5">
                     Create an account
@@ -79,7 +79,7 @@
 
                     <router-link
                       class="btn btn-lg btn-block btn-primary"
-                      style="background-color: blue;"
+                      style="background-color: blue"
                       to="/login"
                     >
                       Login here
@@ -100,68 +100,105 @@ export default {
   data() {
     return {
       error: null,
-      fullName: '',
-      email: '',
-      username: '',
-      password: '',
-      confirmPassword: '',
-    }
+      fullName: "",
+      email: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+    };
   },
   methods: {
     async submitForm() {
-      const regNum = /[0-9]/
-      let findSpecialCharacter = false
-      let validFullName = false
-      const allSpecialCharacter = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~"
+      const regNum = /[0-9]/;
+      const regexp = /[A-Z]/;
+      const reg = /[a-z]/;
+
+      let findSpecialCharacter = false;
+      let validFullName = false;
+      let validPassword = false;
+      const allSpecialCharacter = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
+
+      for (let k = 0; k < allSpecialCharacter.length; k++) {
+        for (let j = 0; j < this.password.length; j++) {
+          validPassword = this.password[j] === allSpecialCharacter[k];
+          console.log(validPassword);
+          if (validPassword) {
+            break;
+          }
+        }
+        if (validPassword) {
+          break;
+        }
+      }
+
+      if (validPassword) {
+        validPassword = this.password.match(regNum);
+        if (validPassword) {
+          validPassword = this.password.match(regexp);
+          if (validPassword) {
+            validPassword = this.password.match(reg);
+            if (validPassword) {
+              validPassword = true;
+            } else {
+              validPassword = false;
+            }
+          } else {
+            validPassword = false;
+          }
+        } else {
+          validPassword = false;
+        }
+      } else {
+        validPassword = false;
+      }
+
+      console.log(validPassword);
 
       for (let i = 0; i < allSpecialCharacter.length; i++) {
         for (let j = 0; j < this.fullName.length; j++) {
-          validFullName = this.fullName[j] === allSpecialCharacter[i]
+          validFullName = this.fullName[j] === allSpecialCharacter[i];
           if (validFullName) {
-            break
+            break;
           }
         }
         if (validFullName) {
-          break
+          break;
         }
       }
       for (let i = 0; i < allSpecialCharacter.length; i++) {
-        findSpecialCharacter = this.email[0] === allSpecialCharacter[i]
+        findSpecialCharacter = this.email[0] === allSpecialCharacter[i];
         if (findSpecialCharacter) {
-          break
+          break;
         }
       }
 
       const validiteValue =
         this.email.length < 10 ||
-        this.email === '' ||
-        !this.email.includes('@prominentpixel.com') ||
+        this.email === "" ||
+        !this.email.includes("@prominentpixel.com") ||
         !(this.password === this.confirmPassword) ||
-        this.password === '' ||
+        this.password === "" ||
         this.fullName.match(regNum) ||
         this.username[0].match(regNum) ||
         findSpecialCharacter ||
-        validFullName
+        validFullName ||
+        !validPassword;
 
       if (validiteValue) {
-        this.error = 'Failed to authenticate. Check your Singup data.'
-        return null
+        this.error = "Failed to authenticate. Check your Singup data.";
+        return null;
       }
-      try {
-        await this.$store.dispatch('storeData/signup', {
-          fullName: this.fullName,
-          email: this.email,
-          username: this.username,
-          password: this.password,
-        })
-        this.$router.replace('/home')
-      } catch (error) {
-        this.error = 'Failed to authenticate. Check your Singup data.'
-      }
+      await this.$store.dispatch("auth/signup", {
+        fullName: this.fullName,
+        email: this.email,
+        username: this.username,
+        password: this.password,
+      });
+      this.$router.replace("/home");
     },
     handleError() {
-      this.error = null
+      this.error = null;
     },
   },
-}
+};
 </script>

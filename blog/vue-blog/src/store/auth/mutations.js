@@ -6,4 +6,8 @@ export default {
   authorName(state, payload) {
     state.authorName = payload
   },
+  storeAccountData(state, payload) {
+    state.signupData.push(payload);
+    console.log(payload);
+  },
 }
